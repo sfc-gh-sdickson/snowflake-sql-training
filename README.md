@@ -1,6 +1,6 @@
 # Snowflake SQL Training — AAA
 
-<img src="https://www.snowflake.com/wp-content/themes/snowflake/assets/img/logo-blue.svg" width="180" alt="Snowflake">
+<img src="Snowflake_Logo.svg" width="240" alt="Snowflake">
 
 A complete half-day Snowflake SQL training package built for AAA technical staff. Covers Snowflake-specific SQL features, query optimization, advanced SQL patterns, and exploratory data analysis — all demonstrated against a realistic AAA-themed synthetic dataset.
 

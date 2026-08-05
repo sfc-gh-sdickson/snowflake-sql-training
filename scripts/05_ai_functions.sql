@@ -182,7 +182,7 @@ SELECT
     SNOWFLAKE.CORTEX.EXTRACT_ANSWER(
         adjuster_notes:notes_text::VARCHAR,
         'Who reviewed this claim?'
-    ) AS extracted_reviewer
+    )[0]:answer::VARCHAR AS extracted_reviewer
 FROM CLAIMS
 WHERE adjuster_notes:notes_text IS NOT NULL
 LIMIT 5;
@@ -391,7 +391,7 @@ SELECT 3, 'Service Note', 'service_note_tech_report.txt',
     'Tire showed significant sidewall damage, likely from curb impact. Spare tire was present but ' ||
     'member was unable to locate jack. Installed spare tire and advised member to replace both rear ' ||
     'tires due to uneven wear pattern observed on remaining rear tire. ' ||
-    'Member expressed concern about cost — recommended AAA partner discount at Discount Tire. ' ||
+    'Member expressed concern about cost - recommended AAA partner discount at Discount Tire. ' ||
     'Total service time: 28 minutes. Member satisfaction: appeared satisfied, thanked technician.';
 
 -- ▶ RUN: Use AI to extract structured data from unstructured documents
@@ -433,11 +433,11 @@ SELECT
     SNOWFLAKE.CORTEX.EXTRACT_ANSWER(
         content_text,
         'What was the total cost or estimate mentioned?'
-    ) AS cost_answer,
+    )[0]:answer::VARCHAR AS cost_answer,
     SNOWFLAKE.CORTEX.EXTRACT_ANSWER(
         content_text,
         'What vehicle was involved?'
-    ) AS vehicle_answer
+    )[0]:answer::VARCHAR AS vehicle_answer
 FROM DOCUMENT_CONTENT;
 
 

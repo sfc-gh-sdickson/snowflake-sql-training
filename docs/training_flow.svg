@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" width="900" height="720">
-  <!-- Background -->
-  <rect width="900" height="720" fill="#FFFFFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 750" width="880" height="750">
+  <rect width="880" height="750" fill="#FFFFFF"/>
 
   <defs>
-    <filter id="shadow" x="-4%" y="-4%" width="108%" height="116%">
-      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#00000022"/>
+    <filter id="shadow" x="-3%" y="-3%" width="106%" height="112%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#00000025"/>
     </filter>
-    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#29B5E8"/>
     </marker>
   </defs>
 
   <!-- Title -->
-  <text x="450" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#11567F">Training Script Execution Order</text>
-  <text x="450" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5B5B5B">Run scripts top-to-bottom. Module 5 can also be delivered standalone.</text>
+  <text x="440" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#11567F">Training Script Execution Order</text>
+  <text x="440" y="56" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#5B5B5B">Run scripts top-to-bottom. Module 5 can also be delivered standalone.</text>
 
   <!-- ═══ Step 0: Setup ═══ -->
-  <rect x="100" y="80" width="700" height="90" rx="8" fill="#11567F" filter="url(#shadow)"/>
-  <text x="130" y="108" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#29B5E8">STEP 0 — PREREQUISITE</text>
-  <text x="130" y="132" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF">00_setup_data.sql</text>
-  <text x="130" y="154" font-family="Arial, sans-serif" font-size="12" fill="#E0E0E0">Creates AAA_TRAINING database, MEMBER_SERVICES schema, and populates 5 tables:</text>
-  <text x="130" y="164" font-family="Arial, sans-serif" font-size="10" fill="#71C9CE">MEMBERS (10K) · ROADSIDE_ASSISTS (50K) · CLAIMS (20K) · CALL_CENTER_INTERACTIONS (30K) · MEMBERSHIP_PLANS (3)</text>
+  <!-- Box: x=80, w=720, right=800. Text at x=105, max right ≈ 780. -->
+  <rect x="80" y="76" width="720" height="95" rx="8" fill="#11567F" filter="url(#shadow)"/>
+  <text x="105" y="100" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#29B5E8">STEP 0 — PREREQUISITE</text>
+  <text x="105" y="120" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF">00_setup_data.sql</text>
+  <text x="105" y="140" font-family="Arial, sans-serif" font-size="10" fill="#E0E0E0">Creates AAA_TRAINING database and MEMBER_SERVICES schema with 5 tables:</text>
+  <text x="105" y="158" font-family="Arial, sans-serif" font-size="10" fill="#71C9CE">MEMBERS (10K) · ROADSIDE_ASSISTS (50K) · CLAIMS (20K) · CALL_CENTER (30K) · PLANS (3)</text>
 
   <!-- Arrow 0→1 -->
-  <line x1="450" y1="170" x2="450" y2="195" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="440" y1="171" x2="440" y2="194" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- ═══ Step 1: Querying Data ═══ -->
-  <rect x="100" y="200" width="700" height="80" rx="8" fill="#FFFFFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
-  <text x="130" y="228" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#29B5E8">MODULE 1</text>
-  <text x="130" y="250" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#262626">01_querying_data.sql</text>
-  <text x="130" y="270" font-family="Arial, sans-serif" font-size="11" fill="#5B5B5B">QUALIFY · LATERAL FLATTEN · OBJECT_CONSTRUCT · TRY_CAST · Query Profile · Time Travel · Cloning · Caching</text>
+  <rect x="80" y="200" width="720" height="80" rx="8" fill="#FFFFFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
+  <text x="105" y="224" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#29B5E8">MODULE 1</text>
+  <text x="105" y="244" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#262626">01_querying_data.sql</text>
+  <text x="105" y="266" font-family="Arial, sans-serif" font-size="10" fill="#5B5B5B">QUALIFY · FLATTEN · OBJECT_CONSTRUCT · TRY_CAST · Query Profile · Time Travel · Cloning · Caching</text>
 
   <!-- Arrow 1→2 -->
-  <line x1="450" y1="280" x2="450" y2="305" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="440" y1="280" x2="440" y2="304" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- ═══ Step 2: Best Practices ═══ -->
-  <rect x="100" y="310" width="700" height="80" rx="8" fill="#FFFFFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
-  <text x="130" y="338" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#29B5E8">MODULE 2</text>
-  <text x="130" y="360" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#262626">02_best_practices.sql</text>
-  <text x="130" y="380" font-family="Arial, sans-serif" font-size="11" fill="#5B5B5B">Micro-partitions · Partition Pruning · Clustering Keys · Anti-Patterns · EXPLAIN · Warehouse Sizing</text>
+  <rect x="80" y="310" width="720" height="80" rx="8" fill="#FFFFFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
+  <text x="105" y="334" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#29B5E8">MODULE 2</text>
+  <text x="105" y="354" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#262626">02_best_practices.sql</text>
+  <text x="105" y="376" font-family="Arial, sans-serif" font-size="10" fill="#5B5B5B">Micro-partitions · Partition Pruning · Clustering Keys · Anti-Patterns · EXPLAIN · Warehouse Sizing</text>
 
   <!-- Arrow 2→3 -->
-  <line x1="450" y1="390" x2="450" y2="415" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="440" y1="390" x2="440" y2="414" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- ═══ Step 3: Advanced SQL ═══ -->
-  <rect x="100" y="420" width="700" height="80" rx="8" fill="#FFFFFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
-  <text x="130" y="448" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#29B5E8">MODULE 3</text>
-  <text x="130" y="470" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#262626">03_advanced_sql.sql</text>
-  <text x="130" y="490" font-family="Arial, sans-serif" font-size="11" fill="#5B5B5B">CTEs (recursive) · Window Functions · PIVOT/UNPIVOT · LATERAL FLATTEN · ASOF JOIN · MATCH_RECOGNIZE · RATIO_TO_REPORT</text>
+  <rect x="80" y="420" width="720" height="80" rx="8" fill="#FFFFFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
+  <text x="105" y="444" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#29B5E8">MODULE 3</text>
+  <text x="105" y="464" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#262626">03_advanced_sql.sql</text>
+  <text x="105" y="486" font-family="Arial, sans-serif" font-size="10" fill="#5B5B5B">CTEs · Window Functions · PIVOT · FLATTEN · ASOF JOIN · MATCH_RECOGNIZE · RATIO_TO_REPORT</text>
 
   <!-- Arrow 3→4 -->
-  <line x1="450" y1="500" x2="450" y2="525" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="440" y1="500" x2="440" y2="524" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- ═══ Step 4: EDA & Reporting ═══ -->
-  <rect x="100" y="530" width="700" height="80" rx="8" fill="#FFFFFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
-  <text x="130" y="558" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#29B5E8">MODULE 4</text>
-  <text x="130" y="580" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#262626">04_eda_reporting.sql</text>
-  <text x="130" y="600" font-family="Arial, sans-serif" font-size="11" fill="#5B5B5B">Ad-hoc Profiling · Reusable Views · Secure Views · CTAS Snapshots · Materialized Views · Dynamic Tables · Masking Policies</text>
+  <rect x="80" y="530" width="720" height="80" rx="8" fill="#FFFFFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
+  <text x="105" y="554" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#29B5E8">MODULE 4</text>
+  <text x="105" y="574" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#262626">04_eda_reporting.sql</text>
+  <text x="105" y="596" font-family="Arial, sans-serif" font-size="10" fill="#5B5B5B">Ad-hoc Profiling · Views · Secure Views · CTAS · Materialized Views · Dynamic Tables · Masking</text>
 
   <!-- Arrow 4→5 -->
-  <line x1="450" y1="610" x2="450" y2="635" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="440" y1="610" x2="440" y2="634" stroke="#29B5E8" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- ═══ Step 5: AI Functions ═══ -->
-  <rect x="100" y="640" width="700" height="70" rx="8" fill="#F0FAFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
-  <text x="130" y="666" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#29B5E8">MODULE 5 — STANDALONE</text>
-  <text x="130" y="686" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#262626">05_ai_functions.sql</text>
-  <text x="410" y="686" font-family="Arial, sans-serif" font-size="11" fill="#5B5B5B">COMPLETE · SENTIMENT · CLASSIFY · EXTRACT · SUMMARIZE · TRANSLATE · AI on VARIANT · AI on Documents</text>
+  <rect x="80" y="640" width="720" height="85" rx="8" fill="#F0FAFF" stroke="#29B5E8" stroke-width="2" filter="url(#shadow)"/>
+  <text x="105" y="664" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#29B5E8">MODULE 5 — STANDALONE</text>
+  <text x="105" y="684" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#262626">05_ai_functions.sql</text>
+  <text x="105" y="708" font-family="Arial, sans-serif" font-size="10" fill="#5B5B5B">COMPLETE · SENTIMENT · CLASSIFY · EXTRACT · SUMMARIZE · TRANSLATE · AI on VARIANT · Documents</text>
 </svg>

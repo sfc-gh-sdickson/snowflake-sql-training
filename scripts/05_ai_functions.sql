@@ -41,7 +41,7 @@ SELECT
     membership_tier,
     state,
     SNOWFLAKE.CORTEX.COMPLETE(
-        'snowflake-arctic-instruct',
+        'llama3.1-8b',
         'Write a one-sentence member profile for: ' ||
         full_name || ', ' || membership_tier || ' tier member in ' || state ||
         ' who joined on ' || join_date::VARCHAR
@@ -73,7 +73,7 @@ SELECT
     assist_count,
     total_cost,
     SNOWFLAKE.CORTEX.COMPLETE(
-        'snowflake-arctic-instruct',
+        'llama3.1-8b',
         'A AAA member named ' || full_name || ' (' || membership_tier || ' tier) ' ||
         'has had ' || assist_count::VARCHAR || ' roadside assists costing $' ||
         total_cost::VARCHAR || ' total with average response time of ' ||
@@ -194,7 +194,7 @@ SELECT
     c.adjuster_notes:priority::VARCHAR AS priority,
     c.adjuster_notes:documentation::VARCHAR AS docs_required,
     SNOWFLAKE.CORTEX.COMPLETE(
-        'snowflake-arctic-instruct',
+        'llama3.1-8b',
         'Given this insurance claim: Type=' || c.claim_type ||
         ', Amount=$' || c.amount::VARCHAR ||
         ', Priority=' || c.adjuster_notes:priority::VARCHAR ||
@@ -287,7 +287,7 @@ SELECT
     weather:wind_mph::INTEGER AS wind_mph,
     weather:precip_in::FLOAT AS precip_in,
     SNOWFLAKE.CORTEX.COMPLETE(
-        'snowflake-arctic-instruct',
+        'llama3.1-8b',
         'Given weather conditions: ' || weather:conditions::VARCHAR ||
         ', temperature ' || weather:temp_f::VARCHAR || 'F' ||
         ', wind ' || weather:wind_mph::VARCHAR || ' mph' ||
@@ -303,7 +303,7 @@ SELECT
     c.claim_id,
     c.adjuster_notes AS raw_json,
     SNOWFLAKE.CORTEX.COMPLETE(
-        'snowflake-arctic-instruct',
+        'llama3.1-8b',
         'Analyze this claim metadata and provide a one-sentence risk assessment: ' ||
         c.adjuster_notes::VARCHAR
     ) AS ai_risk_assessment
@@ -318,7 +318,7 @@ SELECT
     p.plan_name,
     f.value::VARCHAR AS benefit,
     SNOWFLAKE.CORTEX.COMPLETE(
-        'snowflake-arctic-instruct',
+        'llama3.1-8b',
         'Rewrite this AAA membership benefit as a brief, compelling marketing bullet point (max 15 words): ' ||
         f.value::VARCHAR
     ) AS marketing_copy
@@ -398,7 +398,7 @@ SELECT
     doc_type,
     doc_name,
     SNOWFLAKE.CORTEX.COMPLETE(
-        'snowflake-arctic-instruct',
+        'llama3.1-8b',
         'Extract the following fields from this document as JSON: ' ||
         '{member_name, date, location, issue_type, estimated_cost, resolution}. ' ||
         'If a field is not mentioned, use null. Document:\n\n' || content_text
@@ -481,7 +481,7 @@ SELECT
     ) AS profile_sentiment,
     -- AI-generated recommendation
     SNOWFLAKE.CORTEX.COMPLETE(
-        'snowflake-arctic-instruct',
+        'llama3.1-8b',
         'AAA member ' || full_name || ' (' || membership_tier || ', ' || state || ') ' ||
         'has ' || assist_count::VARCHAR || ' assists totaling $' || total_cost::VARCHAR ||
         '. CSAT range: ' || COALESCE(worst_csat::VARCHAR,'n/a') || ' to ' ||
@@ -511,10 +511,9 @@ ORDER BY total_cost DESC;
 -- └─────────────────────────────────────────────────────────┘
 --
 -- Models available for COMPLETE:
---   snowflake-arctic-instruct  — Snowflake's own model (fast, efficient)
+--   llama3.1-8b               — Fast, low-cost, good default for most tasks
+--   llama3.1-70b              — Stronger reasoning, higher quality output
 --   mistral-large2             — Strong general purpose
---   llama3.1-70b              — Meta's open model
---   llama3.1-8b               — Smaller/faster variant
 --
 -- All functions run INSIDE Snowflake — no data leaves your account.
 -- No API keys, no external services, no egress charges.

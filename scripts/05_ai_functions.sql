@@ -138,15 +138,17 @@ ORDER BY sentiment_score;
 -- └─────────────────────────────────────────────────────────┘
 
 -- ▶ RUN: Classify call center topics into urgency categories
+--   CLASSIFY_TEXT returns a JSON object. Use :label to get the assigned category.
 SELECT
     interaction_id,
     topic,
     channel,
     SNOWFLAKE.CORTEX.CLASSIFY_TEXT(
         topic,
-        ['Urgent - Immediate Action', 'Standard - Normal Priority', 'Low - Informational Only']
-    ) AS urgency_classification
+        ['Urgent', 'Standard', 'Low']
+    ):label::VARCHAR AS urgency
 FROM CALL_CENTER_INTERACTIONS
+WHERE topic IN ('Complaint','Roadside Request','General Inquiry','Plan Upgrade','Technical Support')
 LIMIT 10;
 
 -- ▶ RUN: Classify issue types into operational categories
@@ -156,8 +158,8 @@ SELECT
     weather:conditions::VARCHAR AS conditions,
     SNOWFLAKE.CORTEX.CLASSIFY_TEXT(
         issue_type || ' during ' || weather:conditions::VARCHAR || ' weather',
-        ['Safety Critical', 'Mobility Impaired', 'Convenience Issue']
-    ) AS operational_category
+        ['Safety Critical', 'Mobility Impaired', 'Convenience']
+    ):label::VARCHAR AS operational_category
 FROM ROADSIDE_ASSISTS
 WHERE weather:conditions IS NOT NULL
 LIMIT 10;
@@ -412,7 +414,7 @@ SELECT
     SNOWFLAKE.CORTEX.CLASSIFY_TEXT(
         content_text,
         ['Emergency Incident', 'Insurance Claim', 'Routine Service', 'Complaint']
-    ) AS doc_classification,
+    ):label::VARCHAR AS doc_classification,
     SNOWFLAKE.CORTEX.SENTIMENT(content_text) AS doc_sentiment
 FROM DOCUMENT_CONTENT;
 

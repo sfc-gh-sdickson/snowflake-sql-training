@@ -356,72 +356,61 @@ ORDER BY 1, 2;
 
 -- ------------------------------------------------------------
 -- DEMO 7.2: MATCH_RECOGNIZE — Pattern Matching in Ordered Rows
--- Find members with an escalation pattern: a low-CSAT interaction
--- (satisfaction <= 2) followed by 2 or more additional contacts
--- within 30 days. These are potential churn risks.
+-- Find members with 3+ CONSECUTIVE low-CSAT interactions
+-- (satisfaction <= 2). These are potential churn risks.
+-- Note: Snowflake does not support correlated pattern definitions
+-- (referencing pattern variable A from B's DEFINE clause).
+-- Keep each DEFINE clause self-contained.
 -- ------------------------------------------------------------
 SELECT
     member_id,
-    first_low_csat_ts,
-    last_followup_ts,
-    followup_count,
-    DATEDIFF(day, first_low_csat_ts, last_followup_ts) AS days_of_escalation
+    first_low_ts,
+    last_low_ts,
+    consecutive_low_count,
+    DATEDIFF(day, first_low_ts, last_low_ts) AS days_span
 FROM CALL_CENTER_INTERACTIONS
 MATCH_RECOGNIZE (
     PARTITION BY member_id
     ORDER BY call_ts
     MEASURES
-        FIRST(A.call_ts)         AS first_low_csat_ts,
-        COUNT(B.interaction_id)  AS followup_count,
-        LAST(B.call_ts)          AS last_followup_ts
+        FIRST(L.call_ts) AS first_low_ts,
+        LAST(L.call_ts)  AS last_low_ts,
+        COUNT(*)          AS consecutive_low_count
+    ONE ROW PER MATCH
+    AFTER MATCH SKIP PAST LAST ROW
+    PATTERN (L{3,})
+    DEFINE L AS csat_score <= 2
+)
+ORDER BY consecutive_low_count DESC
+LIMIT 20;
+
+-- MATCH_RECOGNIZE: Complaint followed by 2+ non-complaint follow-up contacts
+-- Pattern: a 'Complaint' topic (A) then 2+ interactions that are NOT complaints (B)
+-- This identifies members who filed a complaint and then kept calling back.
+SELECT
+    member_id,
+    complaint_ts,
+    complaint_topic,
+    followup_count,
+    last_followup_ts,
+    DATEDIFF(day, complaint_ts, last_followup_ts) AS days_of_followup
+FROM CALL_CENTER_INTERACTIONS
+MATCH_RECOGNIZE (
+    PARTITION BY member_id
+    ORDER BY call_ts
+    MEASURES
+        A.call_ts        AS complaint_ts,
+        A.topic          AS complaint_topic,
+        COUNT(B.*)       AS followup_count,
+        LAST(B.call_ts)  AS last_followup_ts
     ONE ROW PER MATCH
     AFTER MATCH SKIP TO NEXT ROW
     PATTERN (A B{2,})
     DEFINE
-        A AS csat_score <= 2,
-        B AS call_ts <= DATEADD(day, 30, FIRST(A.call_ts))
+        A AS topic = 'Complaint',
+        B AS topic != 'Complaint'
 )
 ORDER BY followup_count DESC
-LIMIT 20;
-
--- MATCH_RECOGNIZE: detect complaint followed by escalation to roadside
--- Pattern: a 'Complaint' interaction followed by a roadside assist within 7 days
--- (Combines call center with assists in a CTE first)
-WITH interaction_stream AS (
-    SELECT
-        member_id,
-        call_ts           AS event_ts,
-        'CALL'            AS event_type,
-        topic             AS detail,
-        csat_score
-    FROM CALL_CENTER_INTERACTIONS
-    UNION ALL
-    SELECT
-        member_id,
-        request_ts,
-        'ASSIST'          AS event_type,
-        issue_type,
-        NULL              AS csat_score
-    FROM ROADSIDE_ASSISTS
-)
-SELECT *
-FROM interaction_stream
-MATCH_RECOGNIZE (
-    PARTITION BY member_id
-    ORDER BY event_ts
-    MEASURES
-        A.event_ts   AS complaint_ts,
-        B.event_ts   AS assist_ts,
-        A.detail     AS complaint_topic,
-        B.detail     AS assist_issue
-    ONE ROW PER MATCH
-    AFTER MATCH SKIP TO NEXT ROW
-    PATTERN (A B)
-    DEFINE
-        A AS event_type = 'CALL' AND detail = 'Complaint',
-        B AS event_type = 'ASSIST'
-            AND event_ts <= DATEADD(day, 7, A.event_ts)
-)
 LIMIT 20;
 
 -- ------------------------------------------------------------

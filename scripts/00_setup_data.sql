@@ -58,37 +58,14 @@ CREATE OR REPLACE TABLE MEMBERSHIP_PLANS (
 COMMENT = 'AAA membership tiers — Basic, Plus, Premier';
 
 INSERT INTO MEMBERSHIP_PLANS (plan_id, plan_name, monthly_cost, annual_cost, benefits)
-SELECT
-    v:plan_id::INTEGER,
-    v:plan_name::VARCHAR,
-    v:monthly_cost::NUMBER(6,2),
-    v:annual_cost::NUMBER(8,2),
-    PARSE_JSON(v:benefits)
-FROM (
-    SELECT $1::VARIANT AS v
-    FROM VALUES
-    ('{
-        "plan_id": 1,
-        "plan_name": "Basic",
-        "monthly_cost": 7.00,
-        "annual_cost": 84.00,
-        "benefits": ["Roadside Towing up to 5 miles","Battery Jump-Start","Lockout Service","Fuel Delivery"]
-    }'),
-    ('{
-        "plan_id": 2,
-        "plan_name": "Plus",
-        "monthly_cost": 11.00,
-        "annual_cost": 132.00,
-        "benefits": ["Roadside Towing up to 100 miles","Battery Jump-Start","Lockout Service","Fuel Delivery","Trip Interruption Coverage","Travel Discounts"]
-    }'),
-    ('{
-        "plan_id": 3,
-        "plan_name": "Premier",
-        "monthly_cost": 15.00,
-        "annual_cost": 180.00,
-        "benefits": ["Roadside Towing up to 200 miles","Battery Jump-Start","Lockout Service","Fuel Delivery","Trip Interruption Coverage","Travel Discounts","Identity Theft Monitoring","Concierge Service","RV/Motorcycle Coverage"]
-    }')
-) v;
+SELECT 1, 'Basic', 7.00, 84.00,
+    PARSE_JSON('["Roadside Towing up to 5 miles","Battery Jump-Start","Lockout Service","Fuel Delivery"]')
+UNION ALL
+SELECT 2, 'Plus', 11.00, 132.00,
+    PARSE_JSON('["Roadside Towing up to 100 miles","Battery Jump-Start","Lockout Service","Fuel Delivery","Trip Interruption Coverage","Travel Discounts"]')
+UNION ALL
+SELECT 3, 'Premier', 15.00, 180.00,
+    PARSE_JSON('["Roadside Towing up to 200 miles","Battery Jump-Start","Lockout Service","Fuel Delivery","Trip Interruption Coverage","Travel Discounts","Identity Theft Monitoring","Concierge Service","RV/Motorcycle Coverage"]');
 
 -- ----------------------------------------------------------------------------
 -- 3. MEMBERS — 10,000 rows

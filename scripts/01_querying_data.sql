@@ -32,7 +32,6 @@ USE SCHEMA MEMBER_SERVICES;
 -- │ Filter on a window function result without a subquery.  │
 -- │ This is a Snowflake-specific extension not in ANSI SQL. │
 -- └─────────────────────────────────────────────────────────┘
-
 -- ▶ RUN: Find the earliest-joined active member in each state (with QUALIFY)
 --   Notice: no subquery needed — QUALIFY filters AFTER the window function.
 SELECT
@@ -93,7 +92,6 @@ SELECT
     weather:wind_mph::INTEGER     AS wind_mph
 FROM ROADSIDE_ASSISTS
 LIMIT 10;
-
 -- ▶ RUN: Aggregate on semi-structured fields — average response time by weather
 SELECT
     weather:conditions::VARCHAR          AS weather_condition,
@@ -137,7 +135,6 @@ SELECT
     TRY_CAST('hello'      AS INTEGER)  AS invalid_int,   -- returns NULL
     TRY_CAST('2024-01-15' AS DATE)     AS valid_date,    -- returns date
     TRY_CAST('not-a-date' AS DATE)     AS invalid_date;  -- returns NULL
-
 -- ▶ RUN: Practical use — safely cast VARIANT fields from adjuster notes
 SELECT
     claim_id,
@@ -202,7 +199,6 @@ ORDER BY total_assists DESC;
 
 -- After running: go to Snowsight → History → click this query → "Query Profile"
 
-
 -- ============================================================
 -- SECTION 3: Time Travel
 -- ============================================================
@@ -217,7 +213,6 @@ SELECT COUNT(*) AS active_basic_ca_before
 FROM MEMBERS
 WHERE membership_tier = 'Basic' AND state = 'CA' AND status = 'Active';
 -- NOTE: Remember this number — we will compare it after the update.
-
 -- ▶ RUN STEP 2: Make a change AND capture the query ID in a variable
 --   (Run both lines together as one block)
 UPDATE MEMBERS
@@ -226,41 +221,34 @@ WHERE  membership_tier = 'Basic'
   AND  state = 'CA'
   AND  status = 'Active'
   AND  UNIFORM(0,10,RANDOM()) < 2;
-
 SET update_qid = LAST_QUERY_ID();
 
 -- ▶ RUN STEP 3: Confirm the update happened — count should be HIGHER than before
 SELECT COUNT(*) AS lapsed_basic_ca_after_update
 FROM MEMBERS
 WHERE membership_tier = 'Basic' AND state = 'CA' AND status = 'Lapsed';
-
 -- ▶ RUN STEP 4: AT(OFFSET) — look at data from 60 seconds ago
 --   (Run this within 60 seconds of the UPDATE above)
 --   The count of Active members should match what it was BEFORE the update.
 SELECT COUNT(*) AS active_basic_ca_60sec_ago
 FROM MEMBERS AT(OFFSET => -60)
 WHERE membership_tier = 'Basic' AND state = 'CA' AND status = 'Active';
-
 -- ▶ RUN STEP 5: BEFORE(STATEMENT) — look at data before the specific UPDATE
 --   This uses the query ID we captured in Step 2 — always points to the right query.
 SELECT COUNT(*) AS active_basic_ca_before_update
 FROM MEMBERS BEFORE(STATEMENT => $update_qid)
 WHERE membership_tier = 'Basic' AND state = 'CA' AND status = 'Active';
-
 -- ▶ RUN STEP 6: Restore the data — CLONE at the pre-update point in time
 --   Instead of CREATE OR REPLACE (which destroys time travel), we clone then swap.
 CREATE OR REPLACE TABLE MEMBERS_RESTORED
     CLONE MEMBERS BEFORE(STATEMENT => $update_qid);
-
 -- Verify the restored clone has the original count
 SELECT COUNT(*) AS restored_active_count
 FROM MEMBERS_RESTORED
 WHERE membership_tier = 'Basic' AND state = 'CA' AND status = 'Active';
-
 -- Swap: rename the tables to complete the restore
 ALTER TABLE MEMBERS RENAME TO MEMBERS_DAMAGED;
 ALTER TABLE MEMBERS_RESTORED RENAME TO MEMBERS;
-
 -- Verify the restore is complete
 SELECT COUNT(*) AS final_active_basic_ca
 FROM MEMBERS
@@ -277,13 +265,11 @@ DROP TABLE IF EXISTS MEMBERS_DAMAGED;
 
 -- ▶ RUN STEP 1: Drop the CLAIMS table
 DROP TABLE CLAIMS;
-
 -- ▶ RUN STEP 2: Confirm it's gone
 SHOW TABLES LIKE 'CLAIMS' IN SCHEMA MEMBER_SERVICES;
 
 -- ▶ RUN STEP 3: Recover it with UNDROP — data is fully intact
 UNDROP TABLE CLAIMS;
-
 -- ▶ RUN STEP 4: Verify recovery — all 20,000 rows are back
 SELECT COUNT(*) AS claims_recovered FROM CLAIMS;
 
@@ -306,7 +292,6 @@ CREATE OR REPLACE TABLE MEMBERS_DEV
 SELECT 'ORIGINAL' AS source, COUNT(*) AS rows FROM MEMBERS
 UNION ALL
 SELECT 'CLONE',              COUNT(*)         FROM MEMBERS_DEV;
-
 -- ▶ RUN: Modify the clone — the original is NOT affected
 UPDATE MEMBERS_DEV SET membership_tier = 'Premier' WHERE member_id <= 100;
 
@@ -329,7 +314,6 @@ SHOW TABLES IN SCHEMA MEMBER_SERVICES_DEV;
 DROP TABLE IF EXISTS MEMBERS_DEV;
 DROP SCHEMA IF EXISTS MEMBER_SERVICES_DEV;
 
-
 -- ============================================================
 -- SECTION 5: Caching
 -- ============================================================
@@ -345,7 +329,6 @@ DROP SCHEMA IF EXISTS MEMBER_SERVICES_DEV;
 SELECT COUNT(*)       AS total_members   FROM MEMBERS;
 SELECT MIN(join_date) AS earliest_member FROM MEMBERS;
 SELECT MAX(join_date) AS latest_member   FROM MEMBERS;
-
 -- ▶ RUN: Result cache — run this query TWICE
 --   First run: warehouse does the work (check "Bytes Scanned" in Query Profile).
 --   Second run: returns instantly from cache (Query Profile shows "QUERY RESULT REUSE").
@@ -380,3 +363,4 @@ WHERE status = 'Active'
   AND YEAR(join_date) >= 2020  -- different predicate = cache miss
 GROUP BY 1, 2
 ORDER BY 1, 2;
+

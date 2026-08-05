@@ -2,7 +2,9 @@
 
 <img src="Snowflake_Logo.svg" width="240" alt="Snowflake">
 
-A complete half-day Snowflake SQL training package built for AAA technical staff. Covers Snowflake-specific SQL features, query optimization, advanced SQL patterns, and exploratory data analysis — all demonstrated against a realistic AAA-themed synthetic dataset.
+A complete half-day Snowflake SQL training package built for AAA technical staff. Covers Snowflake-specific SQL features, query optimization, advanced SQL patterns, exploratory data analysis, and Snowflake Cortex AI functions — all demonstrated against a realistic AAA-themed synthetic dataset.
+
+Includes two standalone presentation decks: the core SQL training (28 slides) and an AI Functions deep-dive (18 slides) that can be delivered independently.
 
 ---
 
@@ -14,6 +16,7 @@ A complete half-day Snowflake SQL training package built for AAA technical staff
 | **2 — Query Best Practices** | Micro-partitions, pruning, clustering keys, anti-patterns, warehouse sizing | ~45 min |
 | **3 — Advanced SQL** | CTEs (recursive), Window Functions, PIVOT/UNPIVOT, LATERAL FLATTEN | ~50 min |
 | **4 — EDA and Reporting** | Ad-hoc analysis, reusable views, reporting datasets, governance intro | ~45 min |
+| **5 — AI Functions** *(standalone)* | COMPLETE, SENTIMENT, CLASSIFY, EXTRACT on structured, semi-structured, and unstructured data | ~45 min |
 
 ---
 
@@ -21,13 +24,16 @@ A complete half-day Snowflake SQL training package built for AAA technical staff
 
 ```
 snowflake-sql-training/
-├── AAA_Snowflake_Training.pptx   # Snowflake-branded slide deck (27 slides)
+├── AAA_Snowflake_Training.pptx       # Core SQL training deck (28 slides)
+├── AAA_AI_Functions_Training.pptx    # Standalone AI Functions deck (18 slides)
 ├── scripts/
-│   ├── 00_setup_data.sql         # Creates AAA_TRAINING DB and populates sample data
-│   ├── 01_querying_data.sql      # Module 1 demo script
-│   ├── 02_best_practices.sql     # Module 2 demo script
-│   ├── 03_advanced_sql.sql       # Module 3 demo script
-│   └── 04_eda_reporting.sql      # Module 4 demo script
+│   ├── 00_setup_data.sql             # Creates AAA_TRAINING DB and populates sample data
+│   ├── 01_querying_data.sql          # Module 1 demo script
+│   ├── 02_best_practices.sql         # Module 2 demo script
+│   ├── 03_advanced_sql.sql           # Module 3 demo script (incl. ASOF JOIN, MATCH_RECOGNIZE)
+│   ├── 04_eda_reporting.sql          # Module 4 demo script
+│   └── 05_ai_functions.sql           # Module 5 — Cortex AI Functions demos
+├── Snowflake_Logo.svg
 └── README.md
 ```
 
@@ -113,22 +119,46 @@ Open each script in Snowsight and run sections using the `-- DEMO:` markers as n
 - **Dynamic Tables** — declarative incremental pipelines with `TARGET_LAG`
 - **Column Masking Policies** — protect email/PII automatically by role
 
+### Module 5 — AI Functions (`05_ai_functions.sql`) *(standalone deck available)*
+
+- **CORTEX.COMPLETE** — general-purpose LLM inference on any text (member profiles, recommendations)
+- **CORTEX.SENTIMENT** — score text from -1.0 to +1.0 (feedback, call topics)
+- **CORTEX.CLASSIFY_TEXT** — zero-shot categorization into your labels (urgency routing)
+- **CORTEX.EXTRACT_ANSWER** — question answering from free text (document Q&A)
+- **CORTEX.SUMMARIZE** — condense long text (interaction histories, reports)
+- **CORTEX.TRANSLATE** — multilingual support (10+ languages)
+- **AI on VARIANT/JSON** — combine dot-notation + AI for semi-structured enrichment
+- **AI on Documents** — extract structured fields from incident reports, claim letters, service notes
+- **AI Pipeline** — multi-function enrichment in a single SQL query
+
 ---
 
-## Presentation Deck
+## Presentation Decks
 
-`AAA_Snowflake_Training.pptx` is a 27-slide Snowflake-branded deck structured as:
+### Core Training: `AAA_Snowflake_Training.pptx` (28 slides)
 
 | Slides | Content |
 |--------|---------|
 | 1–2 | Cover + Agenda |
 | 3–9 | Module 1 — Querying Data |
 | 10–14 | Module 2 — Query Best Practices |
-| 15–21 | Module 3 — Advanced SQL |
-| 22–26 | Module 4 — EDA and Reporting |
-| 27 | Thank You |
+| 15–22 | Module 3 — Advanced SQL (incl. ASOF JOIN, MATCH_RECOGNIZE) |
+| 23–27 | Module 4 — EDA and Reporting |
+| 28 | Thank You |
 
-Open in PowerPoint or Keynote. Press `S` in PowerPoint presenter mode to view speaker notes.
+### AI Functions: `AAA_AI_Functions_Training.pptx` (18 slides)
+
+| Slides | Content |
+|--------|---------|
+| 1–2 | Cover + Agenda |
+| 3–6 | Cortex AI Overview (functions, models) |
+| 7–10 | AI on Structured Data (COMPLETE, SENTIMENT, CLASSIFY) |
+| 11–12 | AI on Semi-Structured Data (VARIANT + AI) |
+| 13–14 | AI on Unstructured Data (documents, RAG patterns) |
+| 15–17 | AI Pipeline Pattern + Key Takeaways |
+| 18 | Thank You |
+
+Open in PowerPoint or Keynote. Press `S` in presenter mode to view speaker notes.
 
 ---
 

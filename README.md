@@ -39,6 +39,12 @@ snowflake-sql-training/
 
 ---
 
+## Training Flow
+
+<img src="docs/training_flow.svg" alt="Training Script Execution Order" width="800">
+
+---
+
 ## Quick Start
 
 ### 1. Prerequisites
